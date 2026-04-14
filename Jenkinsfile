@@ -9,48 +9,45 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/Devhuti451/DL-Project-Traffic-Lights.git'
-            }
-        }
+        // ❌ REMOVED WRONG CLONE STAGE
+        // Jenkins already checks out correct repo automatically
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                bat 'docker build -t %IMAGE_NAME% .'
             }
         }
 
         stage('Stop Old Container (if running)') {
             steps {
-                sh '''
-                docker stop $CONTAINER_NAME || true
-                docker rm $CONTAINER_NAME || true
+                bat '''
+                docker stop %CONTAINER_NAME% || exit 0
+                docker rm %CONTAINER_NAME% || exit 0
                 '''
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                sh '''
-                docker run -d \
-                --name $CONTAINER_NAME \
-                -p $PORT:8888 \
-                $IMAGE_NAME
+                bat '''
+                docker run -d ^
+                --name %CONTAINER_NAME% ^
+                -p %PORT%:8888 ^
+                %IMAGE_NAME%
                 '''
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                sh 'docker ps'
+                bat 'docker ps'
             }
         }
     }
 
     post {
         success {
-            echo '✅ Deployment successful! Jupyter Notebook is running on port 8888.'
+            echo '✅ Deployment successful! Open http://localhost:8888'
         }
         failure {
             echo '❌ Build failed. Check logs.'
