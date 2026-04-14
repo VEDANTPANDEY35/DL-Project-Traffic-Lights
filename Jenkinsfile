@@ -9,18 +9,32 @@ pipeline {
 
     stages {
 
-        stage('Build Docker Image') {
+        stage('Build Docker Image (No Cache)') {
             steps {
-                bat 'docker build -t %IMAGE_NAME% .'
+                bat 'docker build --no-cache -t %IMAGE_NAME% .'
             }
         }
 
-        stage('Stop Old Container (if running)') {
+        stage('Stop Old Container') {
             steps {
                 bat '''
                 docker stop %CONTAINER_NAME% || exit 0
                 docker rm %CONTAINER_NAME% || exit 0
                 '''
+            }
+        }
+
+        stage('Remove Old Image (Optional Clean)') {
+            steps {
+                bat '''
+                docker rmi %IMAGE_NAME% || exit 0
+                '''
+            }
+        }
+
+        stage('Rebuild Docker Image') {
+            steps {
+                bat 'docker build --no-cache -t %IMAGE_NAME% .'
             }
         }
 
