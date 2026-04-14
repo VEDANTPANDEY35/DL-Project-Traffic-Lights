@@ -9,9 +9,6 @@ pipeline {
 
     stages {
 
-        // ❌ REMOVED WRONG CLONE STAGE
-        // Jenkins already checks out correct repo automatically
-
         stage('Build Docker Image') {
             steps {
                 bat 'docker build -t %IMAGE_NAME% .'
@@ -33,6 +30,7 @@ pipeline {
                 docker run -d ^
                 --name %CONTAINER_NAME% ^
                 -p %PORT%:8888 ^
+                -v "%WORKSPACE%:/app" ^
                 %IMAGE_NAME%
                 '''
             }
