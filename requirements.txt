@@ -1,8 +1,10 @@
 numpy
 opencv-python
 pillow
-torch
-torchvision
-ultralytics
 matplotlib
 ipykernel
+ultralytics
+
+# CPU version of torch (IMPORTANT)
+torch --index-url https://download.pytorch.org/whl/cpu
+torchvision --index-url https://download.pytorch.org/whl/cpu
