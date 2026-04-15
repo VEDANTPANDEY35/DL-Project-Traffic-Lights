@@ -1,10 +1,14 @@
 FROM python:3.10
 
 WORKDIR /app
-COPY . .
+
+# 🔥 Install dependencies first (cached layer)
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install notebook
+
+# 🔥 Copy project files
+COPY . .
 
 EXPOSE 8888
 

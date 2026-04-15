@@ -9,9 +9,9 @@ pipeline {
 
     stages {
 
-        stage('Build Docker Image (Fresh)') {
+        stage('Build Docker Image') {
             steps {
-                bat 'docker build --no-cache -t %IMAGE_NAME% .'
+                bat 'docker build -t %IMAGE_NAME% .'
             }
         }
 
